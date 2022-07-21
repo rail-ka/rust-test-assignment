@@ -1,0 +1,12 @@
+[package]
+name = "test-assignment"
+version = "0.1.0"
+edition = "2021"
+authors = ["Rail Khusnutdinov <mail@rail-ka.ru>"]
+
+[badges]
+travis-ci = { repository = "rail-ka/test-assignment", branch = "main" }
+
+[[bin]]
+name = "test-assignment"
+path = "src/main.rs"

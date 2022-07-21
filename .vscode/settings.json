@@ -1,0 +1,8 @@
+{
+    "workbench.preferredLightColorTheme": "Verdigris Light",
+    "workbench.preferredDarkColorTheme": "Darcula",
+    "window.autoDetectColorScheme": true,
+    "rust-analyzer.hover.actions.enable": false,
+    "rust-analyzer.lens.references.enumVariant.enable": true,
+    "rust-analyzer.checkOnSave.command": "clippy",
+}
