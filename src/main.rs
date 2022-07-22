@@ -84,7 +84,7 @@ struct Node {
     /// cached value
     cache: Cell<Option<f32>>,
     /// weak references for depend nodes
-    depends: RefCell<Vec<Weak<Node>>>,
+    dependents: RefCell<Vec<Weak<Node>>>,
 }
 
 impl Node {
@@ -92,12 +92,12 @@ impl Node {
         let node = Rc::new(Node {
             op,
             cache: Cell::new(None),
-            depends: RefCell::new(Vec::with_capacity(1)),
+            dependents: RefCell::new(Vec::with_capacity(1)),
         });
         for n in depends.iter() {
             match n {
                 Value::Node(parent) => {
-                    parent.depends.borrow_mut().push(Rc::downgrade(&node));
+                    parent.dependents.borrow_mut().push(Rc::downgrade(&node));
                 }
                 Value::Input(input) => {
                     input.depends.borrow_mut().push(Rc::downgrade(&node));
@@ -120,10 +120,12 @@ impl Node {
     }
 
     fn invalidate(&self) {
-        self.cache.set(None);
-        for weak in self.depends.borrow().iter() {
-            if let Some(node) = weak.upgrade() {
-                node.invalidate();
+        if self.cache.get().is_some() {
+            self.cache.set(None);
+            for weak in self.dependents.borrow().iter() {
+                if let Some(node) = weak.upgrade() {
+                    node.invalidate();
+                }
             }
         }
     }
